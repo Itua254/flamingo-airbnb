@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: #143D30;
+  --color-primary-light: #1E5343;
+  --color-accent: #D4AF37;
+  --color-accent-hover: #C59D2E;
+  --color-background: #FAF8F5;
+  --color-background-alt: #F3EFE9;
+  --color-text: #2A332F;
+  --color-text-muted: #57635E;
+  --color-border: #E8E3DA;
+  
+  --font-sans: var(--font-inter), sans-serif;
+  --font-serif: var(--font-playfair), serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+/* Custom premium animations & design utilities */
+.glass-nav {
+  background: rgba(250, 248, 245, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(20, 61, 48, 0.06);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+}
+
+.premium-shadow {
+  box-shadow: 0 4px 20px -2px rgba(20, 61, 48, 0.05), 0 2px 8px -1px rgba(20, 61, 48, 0.03);
+}
+
+.premium-shadow-hover:hover {
+  box-shadow: 0 12px 30px -4px rgba(20, 61, 48, 0.08), 0 4px 12px -2px rgba(20, 61, 48, 0.04);
+  transform: translateY(-2px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Custom smooth transitions */
+.transition-premium {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
