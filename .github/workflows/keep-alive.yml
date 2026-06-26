@@ -1,0 +1,41 @@
+name: Weekly Keep-Alive Health Check
+
+on:
+  schedule:
+    # Run every Sunday at midnight
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  ping-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Production URL
+        run: |
+          # Replace with actual production URL once deployed
+          URL="https://flamingoairbnb.com"
+          echo "Pinging $URL..."
+          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" "$URL")
+          echo "Response code: $STATUS_CODE"
+          if [ "$STATUS_CODE" -ne 200 ] && [ "$STATUS_CODE" -ne 301 ] && [ "$STATUS_CODE" -ne 302 ]; then
+            echo "Frontend health check failed with status $STATUS_CODE"
+            # Not failing the whole job just in case the site isn't live yet
+          else
+            echo "Frontend health check passed!"
+          fi
+
+      - name: Ping Supabase to prevent pause
+        run: |
+          SUPABASE_URL="https://hpaqwuljvceuwhgiscxe.supabase.co/rest/v1/reviews?select=id&limit=1"
+          ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwYXF3dWxqdmNldXdoZ2lzY3hlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MjEzNTgsImV4cCI6MjA5Nzk5NzM1OH0.MUkgZnhR0A87ph1Vlf-AJyWE5Sa8kKA9TnclpbeupXQ."
+          echo "Pinging Supabase API..."
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}\n" \
+            -H "apikey: $ANON_KEY" \
+            -H "Authorization: Bearer $ANON_KEY" \
+            "$SUPABASE_URL")
+          echo "Supabase Response code: $STATUS_CODE"
+          if [ "$STATUS_CODE" -ne 200 ]; then
+            echo "Supabase ping failed with status $STATUS_CODE"
+            exit 1
+          fi
+          echo "Supabase ping passed!"
