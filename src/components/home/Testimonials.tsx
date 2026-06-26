@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { Star, Quote, Plus, X } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { supabase, type Tables, type InsertDto } from "@/lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Database } from "@/lib/database.types";
 
-type Review = Database["public"]["Tables"]["reviews"]["Row"];
+type Review = Tables<"reviews">;
 
 export default function Testimonials() {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -27,34 +26,36 @@ export default function Testimonials() {
       .eq("is_approved", true)
       .order("created_at", { ascending: false })
       .limit(6);
-    
+
     if (data) {
-      setReviews(data);
+      setReviews(data as Review[]);
     }
     setLoading(false);
   };
 
   useEffect(() => {
     fetchReviews();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!authorName || !content) return;
-    
+
     setSubmitting(true);
+    const payload: InsertDto<"reviews"> = {
+      author_name: authorName,
+      rating,
+      content,
+    };
+
     const { data } = await supabase
       .from("reviews")
-      .insert({
-        author_name: authorName,
-        rating,
-        content,
-        // is_approved is true by default
-      })
+      .insert(payload as never)
       .select();
 
     if (data && data.length > 0) {
-      setReviews([data[0], ...reviews].slice(0, 6)); // Add new review and keep max 6
+      setReviews(([data[0] as Review, ...reviews]).slice(0, 6));
       setIsModalOpen(false);
       setAuthorName("");
       setRating(5);
@@ -70,7 +71,7 @@ export default function Testimonials() {
           <h2 className="text-3xl md:text-5xl font-serif font-bold text-[var(--color-primary)] mb-4">Guest Experiences</h2>
           <p className="text-[var(--color-text-muted)] text-lg max-w-2xl">Read what our recent guests have to say about their stay at Flamingo Airbnb.</p>
         </div>
-        <button 
+        <button
           onClick={() => setIsModalOpen(true)}
           className="hidden md:flex items-center gap-2 bg-[var(--color-primary)] text-white px-6 py-3 rounded-full hover:bg-[var(--color-accent)] transition-colors font-medium shadow-lg shrink-0"
         >
@@ -85,9 +86,9 @@ export default function Testimonials() {
       ) : reviews.length === 0 ? (
         <div className="bg-gray-50 rounded-3xl p-12 text-center border border-dashed border-gray-300">
           <p className="text-gray-500 mb-4 text-lg">No reviews yet. Be the first to share your experience!</p>
-          <button 
+          <button
             onClick={() => setIsModalOpen(true)}
-            className="md:hidden inline-flex items-center gap-2 bg-[var(--color-primary)] text-white px-6 py-3 rounded-full hover:bg-[var(--color-accent)] transition-colors font-medium shadow-lg"
+            className="inline-flex items-center gap-2 bg-[var(--color-primary)] text-white px-6 py-3 rounded-full hover:bg-[var(--color-accent)] transition-colors font-medium shadow-lg"
           >
             <Plus className="w-5 h-5" /> Leave a Review
           </button>
@@ -96,7 +97,7 @@ export default function Testimonials() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence>
             {reviews.map((t, index) => (
-              <motion.div 
+              <motion.div
                 key={t.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -106,7 +107,7 @@ export default function Testimonials() {
                 <Quote className="absolute top-8 right-8 h-12 w-12 text-[var(--color-accent)] opacity-10 group-hover:opacity-20 transition-opacity duration-300" />
                 <div className="flex gap-1 mb-6">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className={`h-5 w-5 ${i < t.rating ? 'fill-[var(--color-accent)] text-[var(--color-accent)]' : 'fill-gray-200 text-gray-200'}`} />
+                    <Star key={i} className={`h-5 w-5 ${i < t.rating ? "fill-[var(--color-accent)] text-[var(--color-accent)]" : "fill-gray-200 text-gray-200"}`} />
                   ))}
                 </div>
                 <p className="text-[var(--color-text-muted)] font-light leading-relaxed mb-8 flex-grow">
@@ -125,7 +126,7 @@ export default function Testimonials() {
       )}
 
       {reviews.length > 0 && (
-        <button 
+        <button
           onClick={() => setIsModalOpen(true)}
           className="mt-8 w-full md:hidden flex justify-center items-center gap-2 bg-[var(--color-primary)] text-white px-6 py-4 rounded-full hover:bg-[var(--color-accent)] transition-colors font-medium shadow-lg"
         >
@@ -137,33 +138,33 @@ export default function Testimonials() {
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               onClick={() => setIsModalOpen(false)}
             />
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="bg-white rounded-3xl p-8 w-full max-w-lg relative z-10 shadow-2xl"
             >
-              <button 
+              <button
                 onClick={() => setIsModalOpen(false)}
                 className="absolute top-6 right-6 text-gray-400 hover:text-gray-800 transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
-              
+
               <h3 className="text-2xl font-serif font-bold text-[var(--color-primary)] mb-6">Share Your Experience</h3>
-              
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     required
                     value={authorName}
                     onChange={(e) => setAuthorName(e.target.value)}
@@ -171,7 +172,7 @@ export default function Testimonials() {
                     placeholder="E.g. Sarah M."
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
                   <div className="flex gap-2">
@@ -182,7 +183,7 @@ export default function Testimonials() {
                         onClick={() => setRating(star)}
                         className="focus:outline-none group"
                       >
-                        <Star className={`w-8 h-8 ${star <= rating ? 'fill-[var(--color-accent)] text-[var(--color-accent)]' : 'fill-gray-200 text-gray-200 group-hover:fill-gray-300'} transition-colors`} />
+                        <Star className={`w-8 h-8 ${star <= rating ? "fill-[var(--color-accent)] text-[var(--color-accent)]" : "fill-gray-200 text-gray-200 group-hover:fill-gray-300"} transition-colors`} />
                       </button>
                     ))}
                   </div>
@@ -190,7 +191,7 @@ export default function Testimonials() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Review</label>
-                  <textarea 
+                  <textarea
                     required
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
@@ -200,8 +201,8 @@ export default function Testimonials() {
                   />
                 </div>
 
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={submitting}
                   className="w-full bg-[var(--color-primary)] text-white py-4 rounded-xl font-medium hover:bg-[var(--color-accent)] transition-colors disabled:opacity-70 flex justify-center items-center shadow-lg"
                 >
