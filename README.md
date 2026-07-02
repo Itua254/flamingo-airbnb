@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦩 Flamingo Airbnb
 
-## Getting Started
+<div align="center">
 
-First, run the development server:
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:FF6B6B,100:FE7634&height=150&section=header&text=Flamingo%20Airbnb&fontSize=40&fontColor=ffffff&fontAlignY=40&desc=A%20Full-Stack%20Rental%20Platform&descAlignY=60&descColor=ffe0dc" width="100%"/>
+
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+
+</div>
+
+## 📖 About
+
+Flamingo Airbnb is a modern full-stack rental platform inspired by Airbnb. It allows users to browse, list, and book unique accommodations across Kenya and beyond.
+
+## ✨ Features
+
+- 🏠 **Property Listings** — Browse accommodations with rich images & details
+- 🔐 **User Authentication** — Secure sign-up & login system
+- 🔍 **Search & Filter** — Filter by location, price & date
+- 💳 **Booking System** — Real-time availability & reservations
+- 📱 **Responsive Design** — Works beautifully on all devices
+- 🗺️ **Map Integration** — View properties on interactive map
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 14, TypeScript, Tailwind CSS |
+| Backend | Next.js API Routes, Prisma ORM |
+| Database | PostgreSQL |
+| Auth | NextAuth.js |
+| Deployment | Vercel |
+
+## 🚀 Getting Started
 
 ```bash
+git clone https://github.com/Itua254/flamingo-airbnb.git
+cd flamingo-airbnb
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+flamingo-airbnb/
+├── app/           # Next.js App Router pages
+├── components/    # Reusable UI components
+├── lib/           # Utility functions & config
+├── prisma/        # Database schema
+└── public/        # Static assets
+```
 
-## Learn More
+## 👤 Author
 
-To learn more about Next.js, take a look at the following resources:
+**Bernard Erotekia** — Full-Stack Web Developer from Lodwar, Kenya 🇰🇪
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=flat&logo=github&logoColor=white)](https://github.com/Itua254)
+[![Email](https://img.shields.io/badge/Email-D14836?style=flat&logo=gmail&logoColor=white)](mailto:erotekaibenard@gmail.com)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+<div align="center">
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:FE7634,100:FF6B6B&height=80&section=footer" width="100%"/>
+</div>
